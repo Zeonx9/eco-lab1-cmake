@@ -70,7 +70,7 @@ void merge_sort(
 	char *start_ptr,
 	size_t elem_count,
 	size_t elem_size,
-	int (*comp)(const void *, const void*),
+	int (__cdecl *comp)(const void *, const void*),
 	char *buffer
 ) {
     // локальные переменные
@@ -126,7 +126,7 @@ int16_t ECOCALLMETHOD CEcoLab1_qsort(
 	void* pData,
 	size_t elem_count,
 	size_t elem_size,
-	int (*comp)(const void *, const void*)
+	int (__cdecl *comp)(const void *, const void*)
 ) {
     CEcoLab1* pCMe = (CEcoLab1*)me;
 	void *buffer = 0;

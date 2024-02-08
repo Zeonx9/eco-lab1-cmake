@@ -25,7 +25,7 @@ typedef struct IEcoLab1VTbl {
 		void* pData,
 		size_t elem_count,
 		size_t elem_size,
-		int (*comp)(const void *, const void*)
+		int (__cdecl *comp)(const void *, const void*)
 	);
 
 } IEcoLab1VTbl, *IEcoLab1VTblPtr;

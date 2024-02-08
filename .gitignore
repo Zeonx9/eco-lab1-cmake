@@ -1,3 +1,4 @@
 # Project exclude paths
 /cmake-build-debug-visual-studio/
 /.idea/
+/UnitTest/OutputProcessing/.ipynb_checkpoints
