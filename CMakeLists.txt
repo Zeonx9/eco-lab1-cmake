@@ -39,8 +39,18 @@ add_library(
         Lab1/SharedFiles/IEcoLab1.h
         Lab1/HeaderFiles/CEcoLab1.h
         Lab1/HeaderFiles/CEcoLab1Factory.h
-        Lab1/SourceFiles/NonRecursiveMergeSort.c
-        Lab1/HeaderFiles/NonRecursiveMergeSort.h
+)
+
+add_library(
+        1F5DF16EE1BF43B999A434ED38FE8F3B
+        SHARED
+        Lab1/SourceFiles/CEcoLab1Iterative.c
+        Lab1/SourceFiles/CEcoLab1IterativeFactory.c
+        Lab1/SharedFiles/IdEcoLab1Iterative.h
+        Lab1/SharedFiles/IEcoLab1.h
+        Lab1/HeaderFiles/CEcoLab1Iterative.h
+        Lab1/HeaderFiles/CEcoLab1IterativeFactory.h
+
 )
 
 add_executable(
@@ -52,13 +62,7 @@ add_executable(
         Lab1/HeaderFiles/CEcoLab1Factory.h
 )
 
-add_executable(
-        Lab1_clion_test
-        Lab1/SourceFiles/NonRecursiveMergeSort.c
-        Lab1/HeaderFiles/NonRecursiveMergeSort.h
-)
-
-target_link_libraries(Lab1_clion 1F5DF16EE1BF43B999A434ED38FE8F3A)
+target_link_libraries(Lab1_clion 1F5DF16EE1BF43B999A434ED38FE8F3A 1F5DF16EE1BF43B999A434ED38FE8F3B)
 target_link_libraries(
         Lab1_clion
         $ENV{ECO_FRAMEWORK}/Eco.InterfaceBus1/BuildFiles/Windows/x86/StaticRelease/00000000000000000000000042757331.lib

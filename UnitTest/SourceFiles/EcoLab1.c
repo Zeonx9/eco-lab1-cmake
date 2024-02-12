@@ -4,6 +4,7 @@
 #include "IdEcoInterfaceBus1.h"
 #include "IdEcoFileSystemManagement1.h"
 #include "IdEcoLab1.h"
+#include "IdEcoLab1Iterative.h"
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -165,60 +166,78 @@ typedef struct sorting {
 typedef struct sort_result {
     double my_sort;
     double q_sort;
+    double my_sort2;
 } SortResult;
 
-SortResult testSorting(IEcoMemoryAllocator1 *pIMem, Sorting *sorting, size_t size, IEcoLab1 *lab1) {
+
+SortResult testSorting(IEcoMemoryAllocator1 *pIMem, Sorting *sorting, size_t size, IEcoLab1 *lab1rec, IEcoLab1 *lab1iter) {
     uint32_t byte_count = size * sorting->elem_size;
     void *array = sorting->createArray(pIMem, size);
     void *copy_array = sorting->createCopy(pIMem, array, byte_count);
+    void *copy2_array = sorting->createCopy(pIMem, array, byte_count);
     clock_t before, after;
-    double lab_sort, standard_sort;
+    double lab_sort_rec, standard_sort, lab_sort_iter;
     SortResult result;
 
     before = clock();
-
-    lab1->pVTbl->qsort(lab1, array, size, sorting->elem_size, sorting->comp);
+    lab1rec->pVTbl->qsort(lab1rec, array, size, sorting->elem_size, sorting->comp);
     after = clock();
-    lab_sort = (double)(after - before) / CLOCKS_PER_SEC;
-
+    lab_sort_rec = (double)(after - before) / CLOCKS_PER_SEC;
     sorting->deleteArray(pIMem, array, size);
 
     before = clock();
     qsort(copy_array, size, sorting->elem_size, sorting->comp);
     after = clock();
     standard_sort = (double)(after - before) / CLOCKS_PER_SEC;
-
-
     sorting->deleteArray(pIMem, copy_array, size);
 
-    result.my_sort = lab_sort;
+    before = clock();
+    lab1iter->pVTbl->qsort(lab1iter, copy2_array, size, sorting->elem_size, sorting->comp);
+    after = clock();
+    lab_sort_iter = (double)(after - before) / CLOCKS_PER_SEC;
+    sorting->deleteArray(pIMem, copy2_array, size);
+
+
+    result.my_sort = lab_sort_rec;
+    result.my_sort2 = lab_sort_iter;
     result.q_sort = standard_sort;
+
     return result;
 }
 
 // Вывод сортируемых массивов на экран до и после сортировок
 
-void showSorting(IEcoMemoryAllocator1 *pIMem, Sorting *sorting, IEcoLab1 *lab1, size_t size) {
+void showSorting(IEcoMemoryAllocator1 *pIMem, Sorting *sorting, IEcoLab1 *lab1Rec, IEcoLab1 *lab1Iter, size_t size) {
     void *array_ptr = sorting->createArray(pIMem, size);
     void *copy_array = sorting->createCopy(pIMem, array_ptr, size * sorting->elem_size);
+    void *copy2_array = sorting->createCopy(pIMem, array_ptr, size * sorting->elem_size);
+
     printf("testing sort for type: %s\n", sorting->type_name);
-    printf("array and copy before sort:\n");
+    printf("array and copies before sort:\n");
     sorting->printArray(array_ptr, size);
     sorting->printArray(copy_array, size);
+    sorting->printArray(copy2_array, size);
 
-    lab1->pVTbl->qsort(lab1, array_ptr, size, sorting->elem_size, sorting->comp);
+    lab1Rec->pVTbl->qsort(lab1Rec, array_ptr, size, sorting->elem_size, sorting->comp);
+    lab1Iter->pVTbl->qsort(lab1Iter, copy2_array, size, sorting->elem_size, sorting->comp);
     qsort(copy_array, size, sorting->elem_size, sorting->comp);
 
-    printf("array after merge sort and copy after qsort:\n");
+    printf("array after merge sort(recursive), copy after qsort and another copy after merge sort(iterative):\n");
     sorting->printArray(array_ptr, size);
     sorting->printArray(copy_array, size);
+    sorting->printArray(copy2_array, size);
     printf("\n");
+
+    sorting->deleteArray(pIMem, array_ptr, size);
+    sorting->deleteArray(pIMem, copy_array, size);
+    sorting->deleteArray(pIMem, copy2_array, size);
 }
 
-void testAndWriteToFile(FILE *file, IEcoMemoryAllocator1 *pIMem, IEcoLab1 *lab1, Sorting *sorting, size_t size) {
-    SortResult result = testSorting(pIMem, sorting, size, lab1);
+void testAndWriteToFile(FILE *file, IEcoMemoryAllocator1 *pIMem, IEcoLab1 *lab1rec, IEcoLab1 *lab1iter, Sorting *sorting, size_t size) {
+    SortResult result = testSorting(pIMem, sorting, size, lab1rec, lab1iter);
     printf("time test:\ttype=%s\tsize=%d done.\n", sorting->type_name, size);
-    fprintf(file, "%s,%s,%d,%lf\n", "merge_sort", sorting->type_name, size, result.my_sort);
+    fprintf(file, "%s,%s,%d,%lf\n", "merge_sort_rec", sorting->type_name, size, result.my_sort);
+    fprintf(file, "%s,%s,%d,%lf\n", "merge_sort_iter", sorting->type_name, size, result.my_sort2);
     fprintf(file, "%s,%s,%d,%lf\n", "qsort", sorting->type_name, size, result.q_sort);
 }
 
@@ -232,7 +251,8 @@ int16_t EcoMain(IEcoUnknown* pIUnk) {
     /* Указатель на интерфейс работы с памятью */
     IEcoMemoryAllocator1* pIMem = 0;
     /* Указатель на тестируемый интерфейс */
-    IEcoLab1* pIEcoLab1 = 0;
+    IEcoLab1* pIEcoLab1Rec = 0;
+    IEcoLab1* pIEcoLab1Iter = 0;
 
     Sorting sortByType[4] = {
         {createIntArray, compInts, deleteArray, createCopyArray, printIntArray,sizeof(int), "int"}, // int
@@ -241,7 +261,7 @@ int16_t EcoMain(IEcoUnknown* pIUnk) {
         {createStringArray, compStrings, deleteStringArray, createCopyStringArray, printStringArray, sizeof(char *), "string"} // string
     };
     FILE * resultFile;
-    size_t i, j, sizes[4] = {100000, 500000, 1000000, 5000000};
+    size_t i, j, sizes[4] = {100000, 500000, 1000000, 3000000};
 
 
     /* Проверка и создание системного интерфейса */
@@ -263,8 +283,14 @@ int16_t EcoMain(IEcoUnknown* pIUnk) {
     }
 
     /* Получение тестируемого интерфейса */
-    result = pIBus->pVTbl->QueryComponent(pIBus, &CID_EcoLab1, 0, &IID_IEcoLab1, (void**) &pIEcoLab1);
-    if (result != 0 || pIEcoLab1 == 0) {
+    result = pIBus->pVTbl->QueryComponent(pIBus, &CID_EcoLab1, 0, &IID_IEcoLab1, (void**) &pIEcoLab1Rec);
+    if (result != 0 || pIEcoLab1Rec == 0) {
+        goto Release;
+    }
+
+    /* Получение тестируемого интерфейса */
+    result = pIBus->pVTbl->QueryComponent(pIBus, &CID_EcoLab1Iterative, 0, &IID_IEcoLab1, (void**) &pIEcoLab1Iter);
+    if (result != 0 || pIEcoLab1Iter == 0) {
         goto Release;
     }
 
@@ -273,7 +299,7 @@ int16_t EcoMain(IEcoUnknown* pIUnk) {
 
     // Вывести на экран примеры сортировок
     for (i = 0; i < 4; ++i) {
-        showSorting(pIMem, &sortByType[i], pIEcoLab1, 5);
+        showSorting(pIMem, &sortByType[i], pIEcoLab1Rec, pIEcoLab1Iter, 7);
     }
 
     // Измерить время и записать его в файл
@@ -282,10 +308,12 @@ int16_t EcoMain(IEcoUnknown* pIUnk) {
     fprintf(resultFile, "sort,type,size,time\n");
     for (i = 0; i < 4; ++i) {
         for (j = 0; j < 4; j++) {
-            testAndWriteToFile(resultFile, pIMem, pIEcoLab1, &sortByType[j], sizes[i]);
+            testAndWriteToFile(resultFile, pIMem, pIEcoLab1Rec, pIEcoLab1Iter, &sortByType[j], sizes[i]);
         }
     }
     fclose(resultFile);
+
+//    testSorting(pIMem, sortByType + 3, sizes[3], pIEcoLab1Rec, pIEcoLab1Iter);
 
 Release:
 
@@ -300,8 +328,8 @@ Release:
     }
 
     /* Освобождение тестируемого интерфейса */
-    if (pIEcoLab1 != 0) {
-        pIEcoLab1->pVTbl->Release(pIEcoLab1);
+    if (pIEcoLab1Rec != 0) {
+        pIEcoLab1Rec->pVTbl->Release(pIEcoLab1Rec);
     }
     
     /* Освобождение системного интерфейса */

@@ -1,4 +1,4 @@
-﻿/*
+/*
  * <кодировка символов>
  *   Cyrillic (UTF-8 with signature) - Codepage 65001
  * </кодировка символов>
@@ -17,8 +17,8 @@
  *
  */
 
-#include "CEcoLab1.h"
-#include "CEcoLab1Factory.h"
+#include "CEcoLab1Iterative.h"
+#include "CEcoLab1IterativeFactory.h"
 
 /*
  *
@@ -31,7 +31,7 @@
  * </описание>
  *
  */
-int16_t ECOCALLMETHOD CEcoLab1Factory_QueryInterface(IEcoComponentFactory* me, const UGUID* riid, void** ppv) {
+int16_t ECOCALLMETHOD CEcoLab1IterativeFactory_QueryInterface(IEcoComponentFactory* me, const UGUID* riid, void** ppv) {
     if ( IsEqualUGUID(riid, &IID_IEcoUnknown) || IsEqualUGUID(riid, &IID_IEcoComponentFactory) ) {
         *ppv = me;
     }
@@ -55,8 +55,8 @@ int16_t ECOCALLMETHOD CEcoLab1Factory_QueryInterface(IEcoComponentFactory* me, c
  * </описание>
  *
  */
-uint32_t ECOCALLMETHOD CEcoLab1Factory_AddRef(/* in */ IEcoComponentFactory* me) {
-    CEcoLab1Factory* pCMe = (CEcoLab1Factory*)me;
+uint32_t ECOCALLMETHOD CEcoLab1IterativeFactory_AddRef(/* in */ IEcoComponentFactory* me) {
+    CEcoLab1IterativeFactory* pCMe = (CEcoLab1IterativeFactory*)me;
 
     if (me == 0 ) {
         return -1;
@@ -76,8 +76,8 @@ uint32_t ECOCALLMETHOD CEcoLab1Factory_AddRef(/* in */ IEcoComponentFactory* me)
  * </описание>
  *
  */
-uint32_t ECOCALLMETHOD CEcoLab1Factory_Release(/* in */ IEcoComponentFactory* me) {
-    CEcoLab1Factory* pCMe = (CEcoLab1Factory*)me;
+uint32_t ECOCALLMETHOD CEcoLab1IterativeFactory_Release(/* in */ IEcoComponentFactory* me) {
+    CEcoLab1IterativeFactory* pCMe = (CEcoLab1IterativeFactory*)me;
 
     if (me == 0 ) {
         return -1;
@@ -105,8 +105,8 @@ uint32_t ECOCALLMETHOD CEcoLab1Factory_Release(/* in */ IEcoComponentFactory* me
  * </описание>
  *
  */
-int16_t ECOCALLMETHOD CEcoLab1Factory_Init(/* in */ struct IEcoComponentFactory* me, /* in */ struct IEcoUnknown *pIUnkSystem, /* in */ void* pv) {
-    CEcoLab1Factory* pCMe = (CEcoLab1Factory*)me;
+int16_t ECOCALLMETHOD CEcoLab1IterativeFactory_Init(/* in */ struct IEcoComponentFactory* me, /* in */ struct IEcoUnknown *pIUnkSystem, /* in */ void* pv) {
+    CEcoLab1IterativeFactory* pCMe = (CEcoLab1IterativeFactory*)me;
     int16_t result = -1;
 
     if (me == 0 ) {
@@ -130,8 +130,8 @@ int16_t ECOCALLMETHOD CEcoLab1Factory_Init(/* in */ struct IEcoComponentFactory*
  * </описание>
  *
  */
-int16_t ECOCALLMETHOD CEcoLab1Factory_Alloc(/* in */ struct IEcoComponentFactory* me, /* in */ struct IEcoUnknown *pISystem, /* in */ struct IEcoUnknown *pIUnknownOuter, /* in */ const UGUID* riid, /* out */ void** ppv) {
-    CEcoLab1Factory* pCMe = (CEcoLab1Factory*)me;
+int16_t ECOCALLMETHOD CEcoLab1IterativeFactory_Alloc(/* in */ struct IEcoComponentFactory* me, /* in */ struct IEcoUnknown *pISystem, /* in */ struct IEcoUnknown *pIUnknownOuter, /* in */ const UGUID* riid, /* out */ void** ppv) {
+    CEcoLab1IterativeFactory* pCMe = (CEcoLab1IterativeFactory*)me;
     IEcoUnknown* pIUnk = 0;
     int16_t result = -1;
 
@@ -153,7 +153,7 @@ int16_t ECOCALLMETHOD CEcoLab1Factory_Alloc(/* in */ struct IEcoComponentFactory
 
     /* Инициализация компонента */
     result = me->pVTbl->Init(me, pISystem, pIUnk);
-	
+
     /* Получение указателя на интерфейс */
     result = pIUnk->pVTbl->QueryInterface(pIUnk, riid, ppv);
 
@@ -174,8 +174,8 @@ int16_t ECOCALLMETHOD CEcoLab1Factory_Alloc(/* in */ struct IEcoComponentFactory
  * </описание>
  *
  */
-char_t* ECOCALLMETHOD CEcoLab1Factory_get_Name(/* in */ struct IEcoComponentFactory* me) {
-    CEcoLab1Factory* pCMe = (CEcoLab1Factory*)me;
+char_t* ECOCALLMETHOD CEcoLab1IterativeFactory_get_Name(/* in */ struct IEcoComponentFactory* me) {
+    CEcoLab1IterativeFactory* pCMe = (CEcoLab1IterativeFactory*)me;
 
     if (me == 0 ) {
         return 0;
@@ -195,8 +195,8 @@ char_t* ECOCALLMETHOD CEcoLab1Factory_get_Name(/* in */ struct IEcoComponentFact
  * </описание>
  *
  */
-char_t* ECOCALLMETHOD CEcoLab1Factory_get_Version(/* in */ struct IEcoComponentFactory* me) {
-    CEcoLab1Factory* pCMe = (CEcoLab1Factory*)me;
+char_t* ECOCALLMETHOD CEcoLab1IterativeFactory_get_Version(/* in */ struct IEcoComponentFactory* me) {
+    CEcoLab1IterativeFactory* pCMe = (CEcoLab1IterativeFactory*)me;
 
     if (me == 0 ) {
         return 0;
@@ -216,8 +216,8 @@ char_t* ECOCALLMETHOD CEcoLab1Factory_get_Version(/* in */ struct IEcoComponentF
  * </описание>
  *
  */
-char_t* ECOCALLMETHOD CEcoLab1Factory_get_Manufacturer(/* in */ struct IEcoComponentFactory* me) {
-    CEcoLab1Factory* pCMe = (CEcoLab1Factory*)me;
+char_t* ECOCALLMETHOD CEcoLab1IterativeFactory_get_Manufacturer(/* in */ struct IEcoComponentFactory* me) {
+    CEcoLab1IterativeFactory* pCMe = (CEcoLab1IterativeFactory*)me;
 
     if (me == 0 ) {
         return 0;
@@ -227,15 +227,15 @@ char_t* ECOCALLMETHOD CEcoLab1Factory_get_Manufacturer(/* in */ struct IEcoCompo
 }
 
 /* Create Virtual Table */
-IEcoComponentFactoryVTbl g_x1F5DF16EE1BF43B999A434ED38FE8F3AFactoryVTbl = {
-    CEcoLab1Factory_QueryInterface,
-    CEcoLab1Factory_AddRef,
-    CEcoLab1Factory_Release,
-    CEcoLab1Factory_Alloc,
-    CEcoLab1Factory_Init,
-    CEcoLab1Factory_get_Name,
-    CEcoLab1Factory_get_Version,
-    CEcoLab1Factory_get_Manufacturer
+IEcoComponentFactoryVTbl g_x1F5DF16EE1BF43B999A434ED38FE8F3BFactoryVTbl = {
+        CEcoLab1IterativeFactory_QueryInterface,
+        CEcoLab1IterativeFactory_AddRef,
+        CEcoLab1IterativeFactory_Release,
+        CEcoLab1IterativeFactory_Alloc,
+        CEcoLab1IterativeFactory_Init,
+        CEcoLab1IterativeFactory_get_Name,
+        CEcoLab1IterativeFactory_get_Version,
+        CEcoLab1IterativeFactory_get_Manufacturer
 };
 
 /*
@@ -245,23 +245,23 @@ IEcoComponentFactoryVTbl g_x1F5DF16EE1BF43B999A434ED38FE8F3AFactoryVTbl = {
  * </сводка>
  *
  * <описание>
- *   Функция 
+ *   Функция
  * </описание>
  *
  */
-CEcoLab1Factory g_x1F5DF16EE1BF43B999A434ED38FE8F3AFactory = {
-    &g_x1F5DF16EE1BF43B999A434ED38FE8F3AFactoryVTbl,
-    0,
-    (CreateInstance)createCEcoLab1,
-    (InitInstance)initCEcoLab1,
-    "EcoLab1\0",
-    "1.0.0.0\0",
-    "Mushtukov_Artem\0"
+CEcoLab1IterativeFactory g_x1F5DF16EE1BF43B999A434ED38FE8F3BFactory = {
+        &g_x1F5DF16EE1BF43B999A434ED38FE8F3BFactoryVTbl,
+        0,
+        (CreateInstance) createCEcoLab1Iterative,
+        (InitInstance) initCEcoLab1Iterative,
+        "EcoLab1Iterative\0",
+        "1.0.0.0\0",
+        "Mushtukov_Artem\0"
 };
 
 #ifdef ECO_DLL
 ECO_EXPORT IEcoComponentFactory* ECOCALLMETHOD GetIEcoComponentFactoryPtr() {
-    return (IEcoComponentFactory*)&g_x1F5DF16EE1BF43B999A434ED38FE8F3AFactory;
+    return (IEcoComponentFactory*)&g_x1F5DF16EE1BF43B999A434ED38FE8F3BFactory;
 };
 #elif ECO_LIB
 IEcoComponentFactory* GetIEcoComponentFactoryPtr_1F5DF16EE1BF43B999A434ED38FE8F3A = (IEcoComponentFactory*)&g_x1F5DF16EE1BF43B999A434ED38FE8F3AFactory;
