@@ -58,8 +58,11 @@ add_executable(
         UnitTest/SourceFiles/EcoLab1.c
         Lab1/SharedFiles/IdEcoLab1.h
         Lab1/SharedFiles/IEcoLab1.h
+        Lab1/SharedFiles/IdEcoLab1Iterative.h
         Lab1/HeaderFiles/CEcoLab1.h
         Lab1/HeaderFiles/CEcoLab1Factory.h
+        Lab1/HeaderFiles/CEcoLab1Iterative.h
+        Lab1/HeaderFiles/CEcoLab1IterativeFactory.h
 )
 
 target_link_libraries(Lab1_clion 1F5DF16EE1BF43B999A434ED38FE8F3A 1F5DF16EE1BF43B999A434ED38FE8F3B)

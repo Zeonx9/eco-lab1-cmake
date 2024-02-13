@@ -313,7 +313,6 @@ int16_t EcoMain(IEcoUnknown* pIUnk) {
     }
     fclose(resultFile);
 
-//    testSorting(pIMem, sortByType + 3, sizes[3], pIEcoLab1Rec, pIEcoLab1Iter);
 
 Release:
 
