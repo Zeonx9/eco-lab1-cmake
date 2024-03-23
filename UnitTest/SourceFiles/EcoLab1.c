@@ -5,6 +5,10 @@
 #include "IdEcoFileSystemManagement1.h"
 #include "IdEcoLab1.h"
 #include "IdEcoLab1Iterative.h"
+#include "IEcoCalculatorY.h"
+#include "IdEcoCalculatorD.h"
+#include "IEcoCalculatorX.h"
+#include "IdEcoCalculatorE.h"
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -253,6 +257,7 @@ int16_t EcoMain(IEcoUnknown* pIUnk) {
     /* Указатель на тестируемый интерфейс */
     IEcoLab1* pIEcoLab1Rec = 0;
     IEcoLab1* pIEcoLab1Iter = 0;
+    IEcoCalculatorY* pIY = 0;
 
     Sorting sortByType[4] = {
         {createIntArray, compInts, deleteArray, createCopyArray, printIntArray,sizeof(int), "int"}, // int
@@ -294,24 +299,32 @@ int16_t EcoMain(IEcoUnknown* pIUnk) {
         goto Release;
     }
 
-    // установить начальное состояние для rand()
-    srand(time(0));
-
-    // Вывести на экран примеры сортировок
-    for (i = 0; i < 4; ++i) {
-        showSorting(pIMem, &sortByType[i], pIEcoLab1Rec, pIEcoLab1Iter, 7);
+    result = pIEcoLab1Rec->pVTbl->QueryInterface(pIEcoLab1Rec, &IID_IEcoCalculatorY, (void **) &pIY);
+    if (result != 0 || pIY == 0) {
+        goto Release;
     }
 
-    // Измерить время и записать его в файл
-    printf("testing time of algorithms, results in file 'output.csv'\n");
-    fopen_s(&resultFile, "output.csv", "w");
-    fprintf(resultFile, "sort,type,size,time\n");
-    for (i = 0; i < 4; ++i) {
-        for (j = 0; j < 4; j++) {
-            testAndWriteToFile(resultFile, pIMem, pIEcoLab1Rec, pIEcoLab1Iter, &sortByType[j], sizes[i]);
-        }
-    }
-    fclose(resultFile);
+    printf("Multiplication test 8 * 8 = %d\n", pIY->pVTbl->Multiplication(pIY, 8, 8));
+    printf("Division test 40 / 6 = %d\n", pIY->pVTbl->Division(pIY, 40, 6));
+
+//    // установить начальное состояние для rand()
+//    srand(time(0));
+
+//    // Вывести на экран примеры сортировок
+//    for (i = 0; i < 4; ++i) {
+//        showSorting(pIMem, &sortByType[i], pIEcoLab1Rec, pIEcoLab1Iter, 7);
+//    }
+//
+//    // Измерить время и записать его в файл
+//    printf("testing time of algorithms, results in file 'output.csv'\n");
+//    fopen_s(&resultFile, "output.csv", "w");
+//    fprintf(resultFile, "sort,type,size,time\n");
+//    for (i = 0; i < 4; ++i) {
+//        for (j = 0; j < 4; j++) {
+//            testAndWriteToFile(resultFile, pIMem, pIEcoLab1Rec, pIEcoLab1Iter, &sortByType[j], sizes[i]);
+//        }
+//    }
+//    fclose(resultFile);
 
 
 Release:

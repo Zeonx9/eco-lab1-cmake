@@ -20,14 +20,17 @@
 #ifndef __C_ECOLAB1_H__
 #define __C_ECOLAB1_H__
 
-#include "IEcoLab1.h"
 #include "IEcoSystem1.h"
 #include "IdEcoMemoryManager1.h"
+#include "IEcoLab1.h"
+#include "IEcoCalculatorY.h"
 
 typedef struct CEcoLab1 {
 
     /* Таблица функций интерфейса IEcoLab1 */
     IEcoLab1VTbl* m_pVTblIEcoLab1;
+
+    IEcoCalculatorYVTbl* m_pVTblIY;
 
     /* Счетчик ссылок */
     uint32_t m_cRef;
@@ -40,6 +43,9 @@ typedef struct CEcoLab1 {
 
     /* Данные экземпляра */
     char_t* m_Name;
+
+    /* Ссылка на внутренний компонент для включения, может быть получен из D или E */
+    IEcoCalculatorY* m_pIY;
 
 } CEcoLab1, *CEcoLab1Ptr;
 
