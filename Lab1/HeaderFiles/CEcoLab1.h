@@ -47,6 +47,8 @@ typedef struct CEcoLab1 {
     /* Ссылка на внутренний компонент для включения, может быть получен из D или E */
     IEcoCalculatorY* m_pIY;
 
+    IEcoUnknown* m_pInnerUnknown;
+
 } CEcoLab1, *CEcoLab1Ptr;
 
 /* Инициализация экземпляра */

@@ -258,6 +258,7 @@ int16_t EcoMain(IEcoUnknown* pIUnk) {
     IEcoLab1* pIEcoLab1Rec = 0;
     IEcoLab1* pIEcoLab1Iter = 0;
     IEcoCalculatorY* pIY = 0;
+    IEcoCalculatorX* pIX = 0;
 
     Sorting sortByType[4] = {
         {createIntArray, compInts, deleteArray, createCopyArray, printIntArray,sizeof(int), "int"}, // int
@@ -304,8 +305,16 @@ int16_t EcoMain(IEcoUnknown* pIUnk) {
         goto Release;
     }
 
+    result = pIEcoLab1Rec->pVTbl->QueryInterface(pIEcoLab1Rec, &IID_IEcoCalculatorX, (void **) &pIX);
+    if (result != 0 || pIX == 0) {
+        goto Release;
+    }
+
     printf("Multiplication test 8 * 8 = %d\n", pIY->pVTbl->Multiplication(pIY, 8, 8));
     printf("Division test 40 / 6 = %d\n", pIY->pVTbl->Division(pIY, 40, 6));
+
+    printf("Addition test 8 + 3 = %d\n", pIX->pVTbl->Addition(pIX, 8, 3));
+    printf("Subtraction test 11 - 5 = %d\n", pIX->pVTbl->Subtraction(pIX, 11, 5));
 
 //    // установить начальное состояние для rand()
 //    srand(time(0));

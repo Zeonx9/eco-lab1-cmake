@@ -4,11 +4,13 @@
 #include "CEcoLab1.h"
 #include "IdEcoCalculatorD.h"
 #include "IdEcoCalculatorE.h"
+#include "IdEcoCalculatorB.h"
 
 
 // Функция QueryInterface для интерфейса IEcoLab1
 int16_t ECOCALLMETHOD CEcoLab1_QueryInterface(/* in */ struct IEcoLab1* me, /* in */ const UGUID* riid, /* out */ void** ppv) {
     CEcoLab1* pCMe = (CEcoLab1*)me;
+    int16_t result;
     if (me == 0 || ppv == 0) {
         return -1;
     }
@@ -23,6 +25,12 @@ int16_t ECOCALLMETHOD CEcoLab1_QueryInterface(/* in */ struct IEcoLab1* me, /* i
     else if ( IsEqualUGUID(riid, &IID_IEcoUnknown) ) {
         *ppv = &pCMe->m_pVTblIEcoLab1;
         pCMe->m_pVTblIEcoLab1->AddRef((IEcoLab1*)pCMe);
+    }
+    else if (IsEqualGUID(riid, &IID_IEcoCalculatorX)) {
+        if (pCMe->m_pInnerUnknown != 0) {
+            result = pCMe->m_pInnerUnknown->pVTbl->QueryInterface(pCMe->m_pInnerUnknown, riid, ppv);
+        }
+        return result;
     }
     else {
         *ppv = 0;
@@ -276,6 +284,8 @@ int16_t ECOCALLMETHOD initCEcoLab1(/*in*/ struct IEcoLab1* me, /* in */ struct I
     if (result != 0 || pCMe->m_pIY == 0) {
         result = pIBus->pVTbl->QueryComponent(pIBus, &CID_EcoCalculatorE, 0, &IID_IEcoCalculatorY, (void**) &pCMe->m_pIY);
     }
+
+    result = pIBus->pVTbl->QueryComponent(pIBus, &CID_EcoCalculatorB, (IEcoUnknown *)me, &IID_IEcoUnknown, (void**) &pCMe->m_pInnerUnknown);
 
     /* Освобождение */
     pIBus->pVTbl->Release(pIBus);
