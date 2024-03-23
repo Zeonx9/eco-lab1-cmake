@@ -19,11 +19,6 @@ add_definitions(-D_CONSOLE)
 include_directories(Lab1/HeaderFiles)
 include_directories(Lab1/SharedFiles)
 
-include_directories(Lab1Iterative/HeaderFiles)
-include_directories(Lab1Iterative/SharedFiles)
-
-include_directories(UnitTest/HeaderFiles)
-
 include_directories(Components/SharedFiles)
 
 include_directories(
@@ -49,7 +44,13 @@ add_library(
         Components/SharedFiles/IEcoCalculatorX.h
         Components/SharedFiles/IdEcoCalculatorD.h
         Components/SharedFiles/IdEcoCalculatorE.h
+        Components/SharedFiles/IdEcoCalculatorA.h
+        Components/SharedFiles/IdEcoCalculatorB.h
 )
+
+
+include_directories(Lab1Iterative/HeaderFiles)
+include_directories(Lab1Iterative/SharedFiles)
 
 add_library(
         1F5DF16EE1BF43B999A434ED38FE8F3B
@@ -74,6 +75,8 @@ add_executable(
         Components/SharedFiles/IEcoCalculatorX.h
         Components/SharedFiles/IdEcoCalculatorD.h
         Components/SharedFiles/IdEcoCalculatorE.h
+        Components/SharedFiles/IdEcoCalculatorA.h
+        Components/SharedFiles/IdEcoCalculatorB.h
 )
 
 target_link_libraries(

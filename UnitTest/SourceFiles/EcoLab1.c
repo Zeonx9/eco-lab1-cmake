@@ -53,14 +53,14 @@ int16_t EcoMain(IEcoUnknown* pIUnk) {
     if (result != 0 || pIEcoLab1Rec == 0) {
         goto Release;
     }
-    printf("queried IEcoLab1Iterative component %p\n", pIEcoLab1Rec);
+    printf("queried IEcoLab1 component\n");
 
     /* Получение тестируемого интерфейса */
     result = pIBus->pVTbl->QueryComponent(pIBus, &CID_EcoLab1Iterative, 0, &IID_IEcoLab1, (void**) &pIEcoLab1Iter);
     if (result != 0 || pIEcoLab1Iter == 0) {
         goto Release;
     }
-    printf("queried IEcoLab1Iterative component %p\n", pIEcoLab1Iter);
+    printf("queried IEcoLab1Iterative component\n\n");
 
     /* запрос интерфейса IEcoCalculatorY через IEcoLab1 */
     result = pIEcoLab1Rec->pVTbl->QueryInterface(pIEcoLab1Rec, &IID_IEcoCalculatorY, (void **) &pIY);
