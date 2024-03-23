@@ -310,6 +310,8 @@ int16_t EcoMain(IEcoUnknown* pIUnk) {
         goto Release;
     }
 
+    result = pIBus->pVTbl->QueryComponent(pIBus, &CID_EcoLab1, 0, &IID_IEcoCalculatorY, (void **) &pIY);
+
     printf("Multiplication test 8 * 8 = %d\n", pIY->pVTbl->Multiplication(pIY, 8, 8));
     printf("Division test 40 / 6 = %d\n", pIY->pVTbl->Division(pIY, 40, 6));
 
