@@ -283,7 +283,7 @@ int16_t ECOCALLMETHOD CEcoLab1_IEcoCalculatorX_QueryInterface(/* in */ struct IE
         *ppv = &pCMe->m_pVTblIEcoLab1;
         pCMe->m_pVTblIEcoLab1->AddRef((IEcoLab1*)pCMe);
     }
-    if ( IsEqualUGUID(riid, &IID_IEcoCalculatorY) ) {
+    else if ( IsEqualUGUID(riid, &IID_IEcoCalculatorY) ) {
         *ppv = &pCMe->m_pVTblIY;
         pCMe->m_pVTblIEcoLab1->AddRef((IEcoLab1*)pCMe);
     }
