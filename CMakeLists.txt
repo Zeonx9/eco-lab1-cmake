@@ -18,7 +18,12 @@ add_definitions(-D_CONSOLE)
 
 include_directories(Lab1/HeaderFiles)
 include_directories(Lab1/SharedFiles)
+
+include_directories(Lab1Iterative/HeaderFiles)
+include_directories(Lab1Iterative/SharedFiles)
+
 include_directories(UnitTest/HeaderFiles)
+
 include_directories(Components/SharedFiles)
 
 include_directories(
@@ -49,12 +54,12 @@ add_library(
 add_library(
         1F5DF16EE1BF43B999A434ED38FE8F3B
         SHARED
-        Lab1/SourceFiles/CEcoLab1Iterative.c
-        Lab1/SourceFiles/CEcoLab1IterativeFactory.c
-        Lab1/SharedFiles/IdEcoLab1Iterative.h
-        Lab1/SharedFiles/IEcoLab1.h
-        Lab1/HeaderFiles/CEcoLab1Iterative.h
-        Lab1/HeaderFiles/CEcoLab1IterativeFactory.h
+        Lab1Iterative/SourceFiles/CEcoLab1Iterative.c
+        Lab1Iterative/SourceFiles/CEcoLab1IterativeFactory.c
+        Lab1Iterative/SharedFiles/IdEcoLab1Iterative.h
+        Lab1Iterative/SharedFiles/IEcoLab1.h
+        Lab1Iterative/HeaderFiles/CEcoLab1Iterative.h
+        Lab1Iterative/HeaderFiles/CEcoLab1IterativeFactory.h
 )
 
 add_executable(
@@ -62,11 +67,8 @@ add_executable(
         UnitTest/SourceFiles/EcoLab1.c
         Lab1/SharedFiles/IdEcoLab1.h
         Lab1/SharedFiles/IEcoLab1.h
-        Lab1/SharedFiles/IdEcoLab1Iterative.h
-        Lab1/HeaderFiles/CEcoLab1.h
-        Lab1/HeaderFiles/CEcoLab1Factory.h
-        Lab1/HeaderFiles/CEcoLab1Iterative.h
-        Lab1/HeaderFiles/CEcoLab1IterativeFactory.h
+
+        Lab1Iterative/SharedFiles/IdEcoLab1Iterative.h
 
         Components/SharedFiles/IEcoCalculatorY.h
         Components/SharedFiles/IEcoCalculatorX.h

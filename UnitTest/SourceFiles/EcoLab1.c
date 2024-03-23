@@ -3,8 +3,10 @@
 #include "IdEcoMemoryManager1.h"
 #include "IdEcoInterfaceBus1.h"
 #include "IdEcoFileSystemManagement1.h"
+
 #include "IdEcoLab1.h"
 #include "IdEcoLab1Iterative.h"
+
 #include "IEcoCalculatorY.h"
 #include "IdEcoCalculatorD.h"
 #include "IEcoCalculatorX.h"
@@ -51,12 +53,14 @@ int16_t EcoMain(IEcoUnknown* pIUnk) {
     if (result != 0 || pIEcoLab1Rec == 0) {
         goto Release;
     }
+    printf("queried IEcoLab1Iterative component %p\n", pIEcoLab1Rec);
 
     /* Получение тестируемого интерфейса */
     result = pIBus->pVTbl->QueryComponent(pIBus, &CID_EcoLab1Iterative, 0, &IID_IEcoLab1, (void**) &pIEcoLab1Iter);
     if (result != 0 || pIEcoLab1Iter == 0) {
         goto Release;
     }
+    printf("queried IEcoLab1Iterative component %p\n", pIEcoLab1Iter);
 
     /* запрос интерфейса IEcoCalculatorY через IEcoLab1 */
     result = pIEcoLab1Rec->pVTbl->QueryInterface(pIEcoLab1Rec, &IID_IEcoCalculatorY, (void **) &pIY);
