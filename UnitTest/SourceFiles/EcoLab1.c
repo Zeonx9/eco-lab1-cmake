@@ -8,11 +8,36 @@
 #include "IdEcoLab1Iterative.h"
 
 #include "IEcoCalculatorY.h"
-#include "IdEcoCalculatorD.h"
 #include "IEcoCalculatorX.h"
-#include "IdEcoCalculatorE.h"
+
+#include "IdEcoLab2.h"
+
 #include <stdio.h>
-#include <stdlib.h>
+
+int __cdecl compInts(const void *a_ptr, const void *b_ptr) {
+    const int a = *(int *)a_ptr;
+    const int b = *(int *)b_ptr;
+    return (a > b) - (a < b);
+}
+
+
+void *createIntArray(IEcoMemoryAllocator1 *pIMem, size_t size) {
+    size_t i;
+    int *arr = (int *) pIMem->pVTbl->Alloc(pIMem, size * sizeof(int));
+    for (i = 0; i < size; i++) {
+        arr[i] = rand() %20003 - 10000;
+    }
+    return arr;
+}
+
+void printIntArray(void *array, size_t size) {
+    int * arr = (int *) array;
+    size_t i;
+    for (i = 0; i < size; ++i) {
+        printf("%d ", arr[i]);
+    }
+    printf("\n");
+}
 
 
 // Функция EcoMain - точка входа
@@ -29,6 +54,10 @@ int16_t EcoMain(IEcoUnknown* pIUnk) {
     IEcoLab1* pIEcoLab1Iter = 0;
     IEcoCalculatorY* pIY = 0;
     IEcoCalculatorX* pIX = 0;
+
+    IEcoLab1* pIEcoLab2 = 0;
+    void *testArr = 0;
+    size_t testSize = 10;
 
     /* Проверка и создание системного интерфейса */
     result = pIUnk->pVTbl->QueryInterface(pIUnk, &GID_IEcoSystem1, (void **)&pISys);
@@ -132,6 +161,22 @@ int16_t EcoMain(IEcoUnknown* pIUnk) {
         pIEcoLab1Rec->pVTbl->Release(pIEcoLab1Rec);
     }
 
+    printf("\nTest sorting interface queried from aggregated component:\n");
+    result = pIBus->pVTbl->QueryComponent(pIBus, &CID_EcoLab2, 0, &IID_IEcoLab1, (void**) &pIEcoLab2);
+    if (result == 0) {
+        printf("queried IEcoLab1 interface aggregated by CEcoLab2\n");
+    }
+
+    testArr = createIntArray(pIMem, testSize);
+    printIntArray(testArr, testSize);
+
+    pIEcoLab2->pVTbl->qsort(pIEcoLab2, testArr, testSize, sizeof(int), compInts);
+
+    printIntArray(testArr, testSize);
+
+    pIMem->pVTbl->Free(pIMem, testArr);
+
+
 Release:
 
     /* Освобождение интерфейса для работы с интерфейсной шиной */
@@ -153,7 +198,10 @@ Release:
     if (pIEcoLab1Iter != 0) {
         pIEcoLab1Iter->pVTbl->Release(pIEcoLab1Iter);
     }
-    
+
+    if (pIEcoLab2 != 0) {
+        pIEcoLab2->pVTbl->Release(pIEcoLab2);
+    }
     /* Освобождение системного интерфейса */
     if (pISys != 0) {
         pISys->pVTbl->Release(pISys);
