@@ -79,6 +79,20 @@ add_executable(
         Components/SharedFiles/IdEcoCalculatorB.h
 )
 
+include_directories(Lab2/HeaderFiles)
+include_directories(Lab2/SharedFiles)
+
+add_library(
+        1F5DF16EE1BF43B999A434ED38FE8F3C
+        SHARED
+        Lab2/SharedFiles/IEcoLab1.h
+        Lab2/SharedFiles/IdEcoLab2.h
+        Lab2/HeaderFiles/CEcoLab2.h
+        Lab2/HeaderFiles/CEcoLab2Factory.h
+        Lab2/SourceFiles/CEcoLab2.c
+        Lab2/SourceFiles/CEcoLab2Factory.c
+)
+
 target_link_libraries(
         Lab1_clion
         $ENV{ECO_FRAMEWORK}/Eco.InterfaceBus1/BuildFiles/Windows/x86/StaticRelease/00000000000000000000000042757331.lib
@@ -89,4 +103,5 @@ target_link_libraries(
 
         1F5DF16EE1BF43B999A434ED38FE8F3A
         1F5DF16EE1BF43B999A434ED38FE8F3B
+        1F5DF16EE1BF43B999A434ED38FE8F3C
 )
