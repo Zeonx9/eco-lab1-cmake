@@ -76,49 +76,60 @@ int16_t EcoMain(IEcoUnknown* pIUnk) {
 
     printf("Multiplication test 8 * 8 = %d\n", pIY->pVTbl->Multiplication(pIY, 8, 8));
     printf("Division test 40 / 6 = %d\n", pIY->pVTbl->Division(pIY, 40, 6));
+    pIY->pVTbl->Release(pIY);
 
     printf("Addition test 8 + 3 = %d\n", pIX->pVTbl->Addition(pIX, 8, 3));
     printf("Subtraction test 11 - 5 = %d\n", pIX->pVTbl->Subtraction(pIX, 11, 5));
+    pIX->pVTbl->Release(pIX);
 
     printf("\nCheck Interface properties:\n");
 
     result = pIEcoLab1Rec->pVTbl->QueryInterface(pIEcoLab1Rec, &IID_IEcoCalculatorX, (void **) &pIX);
     if (result == 0) {
         printf("Able to Query IX from ILab1\n");
+        pIX->pVTbl->Release(pIX);
     }
     result = pIEcoLab1Rec->pVTbl->QueryInterface(pIEcoLab1Rec, &IID_IEcoCalculatorY, (void **) &pIY);
     if (result == 0) {
         printf("Able to Query IY from ILab1\n");
+        pIY->pVTbl->Release(pIY);
     }
     result = pIEcoLab1Rec->pVTbl->QueryInterface(pIEcoLab1Rec, &IID_IEcoLab1, (void **) &pIEcoLab1Rec);
     if (result == 0) {
         printf("Able to Query ILab1 from ILab1\n");
+        pIEcoLab1Rec->pVTbl->Release(pIEcoLab1Rec);
     }
 
     result = pIX->pVTbl->QueryInterface(pIX, &IID_IEcoCalculatorX, (void **) &pIX);
     if (result == 0) {
         printf("Able to Query IX from IX\n");
+        pIX->pVTbl->Release(pIX);
     }
     result = pIX->pVTbl->QueryInterface(pIX, &IID_IEcoCalculatorY, (void **) &pIY);
     if (result == 0) {
         printf("Able to Query IY from IX\n");
+        pIY->pVTbl->Release(pIY);
     }
     result = pIX->pVTbl->QueryInterface(pIX, &IID_IEcoLab1, (void **) &pIEcoLab1Rec);
     if (result == 0) {
         printf("Able to Query ILab1 from IX\n");
+        pIEcoLab1Rec->pVTbl->Release(pIEcoLab1Rec);
     }
 
     result = pIY->pVTbl->QueryInterface(pIY, &IID_IEcoCalculatorX, (void **) &pIX);
     if (result == 0) {
         printf("Able to Query IX from IY\n");
+        pIX->pVTbl->Release(pIX);
     }
     result = pIY->pVTbl->QueryInterface(pIY, &IID_IEcoCalculatorY, (void **) &pIY);
     if (result == 0) {
         printf("Able to Query IY from IY\n");
+        pIY->pVTbl->Release(pIY);
     }
     result = pIY->pVTbl->QueryInterface(pIY, &IID_IEcoLab1, (void **) &pIEcoLab1Rec);
     if (result == 0) {
         printf("Able to Query ILab1 from IY\n");
+        pIEcoLab1Rec->pVTbl->Release(pIEcoLab1Rec);
     }
 
 Release:
@@ -139,8 +150,8 @@ Release:
     }
 
     /* Освобождение тестируемого интерфейса */
-    if (pIEcoLab1Rec != 0) {
-        pIEcoLab1Rec->pVTbl->Release(pIEcoLab1Iter);
+    if (pIEcoLab1Iter != 0) {
+        pIEcoLab1Iter->pVTbl->Release(pIEcoLab1Iter);
     }
     
     /* Освобождение системного интерфейса */

@@ -37,6 +37,9 @@ typedef struct CEcoLab1 {
     /* Таблица функций интерфейса IEcoCalculatorX */
     IEcoCalculatorXVTbl* m_pVTblIX;
 
+    /* Неделигирующий интерфейс IEcoNondelegatingUnknown */
+    IEcoUnknownVTbl* m_pVTblINondelegatingUnk;
+
     /* Счетчик ссылок */
     uint32_t m_cRef;
 
@@ -57,6 +60,9 @@ typedef struct CEcoLab1 {
 
     /* Ссылка на внутренний компонент для включения, может быть получен из A*/
     IEcoCalculatorX* m_pIX;
+
+    /* Делегирующий IEcoUnknown, указывает на внешний или неделегирующий IEcoUnknown */
+    IEcoUnknown* m_pIUnkOuter;
 
 } CEcoLab1, *CEcoLab1Ptr;
 
