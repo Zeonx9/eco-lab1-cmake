@@ -50,13 +50,19 @@ uint32_t ECOCALLMETHOD CEcoLab2_Release(/* in */ struct IEcoCalculatorY* me) {
 
 int16_t ECOCALLMETHOD CEcoLab2_IEcoCalculatorX_QueryInterface(/* in */ struct IEcoCalculatorX* me, /* in */ const UGUID* riid, /* out */ void** ppv) {
     CEcoLab2* pCMe = (CEcoLab2 *)((uint64_t)me - sizeof(struct IEcoCalculatorY*));
-    int16_t result = -1;
+    IEcoUnknown * nonDelegating = (IEcoUnknown *)&pCMe->m_pVTblINondelegatingUnk;
+    int16_t result;
 
     /* Проверка указателей */
     if (me == 0 || ppv == 0) {
-        return result;
+        return -1;
     }
-    return pCMe->m_pIUnkOuter->pVTbl->QueryInterface(pCMe->m_pIUnkOuter, riid, ppv);
+
+    result = nonDelegating->pVTbl->QueryInterface(nonDelegating, riid, ppv);
+    if (result != 0 && pCMe->m_pIUnkOuter != 0) {
+        result = pCMe->m_pIUnkOuter->pVTbl->QueryInterface(pCMe->m_pIUnkOuter, riid, ppv);
+    }
+    return result;
 }
 
 uint32_t ECOCALLMETHOD CEcoLab2_IEcoCalculatorX_AddRef(/* in */ struct IEcoCalculatorX* me) {
@@ -67,7 +73,7 @@ uint32_t ECOCALLMETHOD CEcoLab2_IEcoCalculatorX_AddRef(/* in */ struct IEcoCalcu
         return -1;
     }
 
-    return pCMe->m_pIUnkOuter->pVTbl->AddRef(pCMe->m_pIUnkOuter);
+    return pCMe->m_pVTblINondelegatingUnk->AddRef((IEcoUnknown *)&pCMe->m_pVTblINondelegatingUnk);
 }
 
 uint32_t ECOCALLMETHOD CEcoLab2_IEcoCalculatorX_Release(/* in */ struct IEcoCalculatorX* me) {
@@ -78,7 +84,7 @@ uint32_t ECOCALLMETHOD CEcoLab2_IEcoCalculatorX_Release(/* in */ struct IEcoCalc
         return -1;
     }
 
-    return pCMe->m_pIUnkOuter->pVTbl->Release(pCMe->m_pIUnkOuter);
+    return pCMe->m_pVTblINondelegatingUnk->Release((IEcoUnknown *)&pCMe->m_pVTblINondelegatingUnk);
 }
 
 int32_t ECOCALLMETHOD CEcoLab2_Multiplication(/* in */ struct IEcoCalculatorY* me, /* in */ int16_t a, /* in */ int16_t b) {
