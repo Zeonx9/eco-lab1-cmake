@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.26)
-project(Lab1_clion C)
+project(Lab1_2_clion C)
 
 set(CMAKE_C_STANDARD 90)
 
@@ -64,8 +64,8 @@ add_library(
 )
 
 add_executable(
-        Lab1_clion
-        UnitTest/SourceFiles/EcoLab1.c
+        Lab2_clion
+        UnitTest/SourceFiles/EcoLab2.c
         Lab1/SharedFiles/IdEcoLab1.h
         Lab1/SharedFiles/IEcoLab1.h
 
@@ -94,12 +94,11 @@ add_library(
 )
 
 target_link_libraries(
-        Lab1_clion
+        Lab2_clion
         $ENV{ECO_FRAMEWORK}/Eco.InterfaceBus1/BuildFiles/Windows/x86/StaticRelease/00000000000000000000000042757331.lib
         $ENV{ECO_FRAMEWORK}/Eco.MemoryManager1/BuildFiles/Windows/x86/StaticRelease/0000000000000000000000004D656D31.lib
         $ENV{ECO_FRAMEWORK}/Eco.FileSystemManagement1/BuildFiles/Windows/x86/StaticRelease/00000000000000000000000046534D31.lib
         $ENV{ECO_FRAMEWORK}/Eco.System1/BuildFiles/Windows/x86/StaticRelease/00000000000000000000000000000100.lib
-        $ENV{ECO_COMPONENTS}/Lesson06/Eco.CalculatorD/BuildFiles/Windows/x86/StaticRelease/3A8E44677E82475CB4A3719ED8397E61.lib
 
         1F5DF16EE1BF43B999A434ED38FE8F3A
         1F5DF16EE1BF43B999A434ED38FE8F3B
