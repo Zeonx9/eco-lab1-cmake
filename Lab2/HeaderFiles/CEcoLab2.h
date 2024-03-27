@@ -17,8 +17,8 @@
  *
  */
 
-#ifndef __C_ECOLAB1_H__
-#define __C_ECOLAB1_H__
+#ifndef __C_ECOLAB2_H__
+#define __C_ECOLAB2_H__
 
 #include "IEcoSystem1.h"
 #include "IdEcoMemoryManager1.h"
@@ -26,10 +26,7 @@
 #include "IEcoCalculatorY.h"
 #include "IEcoCalculatorX.h"
 
-typedef struct CEcoLab1 {
-
-    /* Таблица функций интерфейса IEcoLab1 */
-    IEcoLab1VTbl* m_pVTblIEcoLab1;
+typedef struct CEcoLab2 {
 
     /* Таблица функций интерфейса IEcoCalculatorY */
     IEcoCalculatorYVTbl* m_pVTblIY;
@@ -55,8 +52,11 @@ typedef struct CEcoLab1 {
     /* Ссылка на внутренний компонент для включения, может быть получен из D или E */
     IEcoCalculatorY* m_pIY;
 
+    /* Ссылка на интерфейс IEcoUnknown внутреннего агрегируемого компонента Lab1 */
+    IEcoUnknown* m_pInnerUnknownLab1;
+
     /* Ссылка на интерфейс IEcoUnknown внутреннего агрегируемого компонента B */
-    IEcoUnknown* m_pInnerUnknown;
+    IEcoUnknown* m_pInnerUnknownB;
 
     /* Ссылка на внутренний компонент для включения, может быть получен из A*/
     IEcoCalculatorX* m_pIX;
@@ -64,13 +64,13 @@ typedef struct CEcoLab1 {
     /* Делегирующий IEcoUnknown, указывает на внешний или неделегирующий IEcoUnknown */
     IEcoUnknown* m_pIUnkOuter;
 
-} CEcoLab1, *CEcoLab1Ptr;
+} CEcoLab2, *CEcoLab2Ptr;
 
 /* Инициализация экземпляра */
-int16_t ECOCALLMETHOD initCEcoLab1(/*in*/ struct IEcoLab1 * me, /* in */ IEcoUnknown *pIUnkSystem);
+int16_t ECOCALLMETHOD initCEcoLab2(/*in*/ struct IEcoCalculatorY * me, /* in */ IEcoUnknown *pIUnkSystem);
 /* Создание экземпляра */
-int16_t ECOCALLMETHOD createCEcoLab1(/* in */ IEcoUnknown* pIUnkSystem, /* in */ IEcoUnknown* pIUnkOuter, /* out */ IEcoLab1 ** ppIEcoLab1);
+int16_t ECOCALLMETHOD createCEcoLab2(/* in */ IEcoUnknown* pIUnkSystem, /* in */ IEcoUnknown* pIUnkOuter, /* out */ IEcoCalculatorY** ppIEcoLab2);
 /* Удаление */
-void ECOCALLMETHOD deleteCEcoLab1(/* in */ IEcoLab1* pIEcoLab1);
+void ECOCALLMETHOD deleteCEcoLab2(/* in */ IEcoCalculatorY* pIEcoLab2);
 
-#endif /* __C_ECOLAB1_H__ */
+#endif /* __C_ECOLAB2_H__ */
