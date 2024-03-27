@@ -67,9 +67,9 @@ typedef struct CEcoLab2 {
 } CEcoLab2, *CEcoLab2Ptr;
 
 /* Инициализация экземпляра */
-int16_t ECOCALLMETHOD initCEcoLab2(/*in*/ struct IEcoUnknown * me, /* in */ IEcoUnknown *pIUnkSystem);
+int16_t ECOCALLMETHOD initCEcoLab2(/*in*/ struct IEcoCalculatorY * me, /* in */ IEcoUnknown *pIUnkSystem);
 /* Создание экземпляра */
-int16_t ECOCALLMETHOD createCEcoLab2(/* in */ IEcoUnknown* pIUnkSystem, /* in */ IEcoUnknown* pIUnkOuter, /* out */ IEcoUnknown** ppIEcoLab2);
+int16_t ECOCALLMETHOD createCEcoLab2(/* in */ IEcoUnknown* pIUnkSystem, /* in */ IEcoUnknown* pIUnkOuter, /* out */ IEcoCalculatorY** ppIEcoLab2);
 /* Удаление */
 void ECOCALLMETHOD deleteCEcoLab2(/* in */ IEcoCalculatorY* pIEcoLab2);
 
