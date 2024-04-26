@@ -20,6 +20,7 @@ include_directories(Lab1/HeaderFiles)
 include_directories(Lab1/SharedFiles)
 
 include_directories(Components/SharedFiles)
+include_directories(UnitTest/HeaderFiles)
 
 include_directories(
         $ENV{ECO_FRAMEWORK}/Eco.List1/SharedFiles
@@ -46,6 +47,20 @@ add_library(
         Components/SharedFiles/IdEcoCalculatorE.h
         Components/SharedFiles/IdEcoCalculatorA.h
         Components/SharedFiles/IdEcoCalculatorB.h
+
+        Lab1/HeaderFiles/CEcoLab1ConnectionPoint.h
+        Lab1/HeaderFiles/CEcoLab1EnumConnectionPoints.h
+        Lab1/HeaderFiles/CEcoLab1EnumConnections.h
+
+        Lab1/SharedFiles/IEcoConnectionPoint.h
+        Lab1/SharedFiles/IEcoConnectionPointContainer.h
+        Lab1/SharedFiles/IEcoEnumConnectionPoints.h
+        Lab1/SharedFiles/IEcoEnumConnections.h
+        Lab1/SharedFiles/IEcoLab1Events.h
+
+        Lab1/SourceFiles/CEcoLab1ConnectionPoint.c
+        Lab1/SourceFiles/CEcoLab1EnumConnectionPoints.c
+        Lab1/SourceFiles/CEcoLab1EnumConnections.c
 )
 
 
@@ -64,8 +79,8 @@ add_library(
 )
 
 add_executable(
-        Lab2_clion
-        UnitTest/SourceFiles/EcoLab2.c
+        Lab3_clion
+        UnitTest/SourceFiles/EcoLab3.c
         Lab1/SharedFiles/IdEcoLab1.h
         Lab1/SharedFiles/IEcoLab1.h
 
@@ -77,6 +92,9 @@ add_executable(
         Components/SharedFiles/IdEcoCalculatorE.h
         Components/SharedFiles/IdEcoCalculatorA.h
         Components/SharedFiles/IdEcoCalculatorB.h
+
+        UnitTest/HeaderFiles/CEcoLab1Sink.h
+        UnitTest/SourceFiles/CEcoLab1Sink.c
 )
 
 include_directories(Lab2/HeaderFiles)
@@ -94,13 +112,12 @@ add_library(
 )
 
 target_link_libraries(
-        Lab2_clion
+        Lab3_clion
         $ENV{ECO_FRAMEWORK}/Eco.InterfaceBus1/BuildFiles/Windows/x86/StaticRelease/00000000000000000000000042757331.lib
         $ENV{ECO_FRAMEWORK}/Eco.MemoryManager1/BuildFiles/Windows/x86/StaticRelease/0000000000000000000000004D656D31.lib
         $ENV{ECO_FRAMEWORK}/Eco.FileSystemManagement1/BuildFiles/Windows/x86/StaticRelease/00000000000000000000000046534D31.lib
         $ENV{ECO_FRAMEWORK}/Eco.System1/BuildFiles/Windows/x86/StaticRelease/00000000000000000000000000000100.lib
+        $ENV{ECO_FRAMEWORK}/Eco.List1/BuildFiles/Windows/x86/StaticRelease/53884AFC93C448ECAA929C8D3A562281.lib
 
         1F5DF16EE1BF43B999A434ED38FE8F3A
-        1F5DF16EE1BF43B999A434ED38FE8F3B
-        1F5DF16EE1BF43B999A434ED38FE8F3C
 )
