@@ -45,6 +45,7 @@ typedef struct IEcoLab1VTblEvents {
     int16_t (ECOCALLMETHOD *OnRecursiveCallReturn)(/* in */ struct IEcoLab1Events* me, bool_t firstHalf);
     int16_t (ECOCALLMETHOD *BeforeMerge)(/* in */ struct IEcoLab1Events* me, /* in */ const void *startPtr, size_t elem_count);
     int16_t (ECOCALLMETHOD *AfterMerge)(/* in */ struct IEcoLab1Events* me, /* in */ const void *startPtr, size_t elem_count);
+    int16_t (ECOCALLMETHOD *OnMergeElementSelected)(/* in */ struct IEcoLab1Events* me, /* in */ const void *element, bool_t isFromFirstHalf);
 
 } IEcoLab1VTblEvents, *IEcoLab1VTblEventsPtr;
 

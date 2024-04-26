@@ -47,7 +47,7 @@ int16_t EcoMain(IEcoUnknown* pIUnk) {
     /* Указатель на тестируемый интерфейс */
     IEcoLab1* pIEcoLab1Rec = 0;
     void *testArr = 0;
-    size_t testSize = 10;
+    size_t testSize = 8;
 
     /* Указатель на интерфейс контейнера точек подключения */
     IEcoConnectionPointContainer* pICPC = 0;

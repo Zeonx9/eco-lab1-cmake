@@ -193,6 +193,36 @@ int16_t ECOCALLMETHOD CEcoLab1_Fire_AfterMerge(/* in */ struct IEcoLab1* me, con
     return result;
 }
 
+// callback function
+int16_t ECOCALLMETHOD CEcoLab1_Fire_OnMergeElementSelected(/* in */ struct IEcoLab1* me, const void * element_ptr, bool_t isFromFirstHalf) {
+    CEcoLab1* pCMe = (CEcoLab1*)me;
+    int16_t result = 0;
+    IEcoEnumConnections* pEnum = 0;
+    IEcoLab1Events* pIEvents = 0;
+    EcoConnectionData cd;
+
+    if (me == 0 ) {
+        return -1;
+    }
+
+    if (pCMe->m_pISinkCP != 0) {
+        result = ((IEcoConnectionPoint*)pCMe->m_pISinkCP)->pVTbl->EnumConnections((IEcoConnectionPoint*)pCMe->m_pISinkCP, &pEnum);
+        if ( (result == 0) && (pEnum != 0) ) {
+            while (pEnum->pVTbl->Next(pEnum, 1, &cd, 0) == 0) {
+                result = cd.pUnk->pVTbl->QueryInterface(cd.pUnk, &IID_IEcoLab1Events, (void**)&pIEvents);
+                if ( (result == 0) && (pIEvents != 0) ) {
+                    result = pIEvents->pVTbl->OnMergeElementSelected(pIEvents, element_ptr, isFromFirstHalf);
+                    pIEvents->pVTbl->Release(pIEvents);
+                }
+                cd.pUnk->pVTbl->Release(cd.pUnk);
+            }
+            pEnum->pVTbl->Release(pEnum);
+        }
+    }
+    return result;
+}
+
+
 // Копирует заданное число байт
 void copy_bytes(char *src, char *dst, size_t count) {
 	char *end = src + count;
@@ -243,20 +273,24 @@ void merge_sort(
     while (left_ptr < middle_ptr && right_ptr < end_ptr) {
         int comp_result = comp(left_ptr, right_ptr);
         if (comp_result <= 0) {
+            CEcoLab1_Fire_OnMergeElementSelected(me, left_ptr, TRUE);
             copy_bytes(left_ptr, current_ptr, elem_size);
             left_ptr += elem_size;
         } else {
+            CEcoLab1_Fire_OnMergeElementSelected(me, right_ptr, FALSE);
             copy_bytes(right_ptr, current_ptr, elem_size);
             right_ptr += elem_size;
         }
         current_ptr += elem_size;
     }
     while (left_ptr < middle_ptr) {
+        CEcoLab1_Fire_OnMergeElementSelected(me, left_ptr, TRUE);
         copy_bytes(left_ptr, current_ptr, elem_size);
         left_ptr += elem_size;
         current_ptr += elem_size;
     }
     while (right_ptr < end_ptr) {
+        CEcoLab1_Fire_OnMergeElementSelected(me, right_ptr, FALSE);
         copy_bytes(right_ptr, current_ptr, elem_size);
         right_ptr += elem_size;
         current_ptr += elem_size;

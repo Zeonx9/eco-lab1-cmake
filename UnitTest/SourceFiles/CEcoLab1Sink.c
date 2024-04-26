@@ -21,7 +21,7 @@
 #include "IEcoConnectionPointContainer.h"
 
 int16_t large_pause = 400;
-int16_t small_pause = 100;
+int16_t small_pause = 0;
 
 /*
  *
@@ -165,8 +165,19 @@ int16_t ECOCALLMETHOD CEcoLab1Sink_AfterMerge(/* in */ struct IEcoLab1Events* me
     if (me == 0) {
         return -1;
     }
-    printf("depth: %d - result: ", pCMe->m_depth);
+    printf("\ndepth: %d - result: ", pCMe->m_depth);
     CEcoLab1Sink_printIntArray(startPtr, elem_count);
+    Sleep(large_pause);
+    return 0;
+}
+
+int16_t ECOCALLMETHOD CEcoLab1Sink_OnMergeElementSelected(/* in */ struct IEcoLab1Events* me, /* in */ const void *elementPtr, bool_t isFromFirstHalf) {
+    CEcoLab1Sink *pCMe = (CEcoLab1Sink *) me;
+    int element = *(int *)elementPtr;
+    if (me == 0) {
+        return -1;
+    }
+    printf("%d(%s) ", element, isFromFirstHalf? "L" : "R");
     Sleep(large_pause);
     return 0;
 }
@@ -246,7 +257,8 @@ IEcoLab1VTblEvents g_x2D2E3B9214F248A6A09ECB494B59C795VTblEvents = {
     CEcoLab1Sink_OnRecursiveCall,
     CEcoLab1Sink_OnRecursiveCallReturned,
     CEcoLab1Sink_BeforeMerge,
-    CEcoLab1Sink_AfterMerge
+    CEcoLab1Sink_AfterMerge,
+    CEcoLab1Sink_OnMergeElementSelected
 };
 
 /*
