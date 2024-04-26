@@ -49,22 +49,10 @@ uint32_t ECOCALLMETHOD CEcoLab1_Release(/* in */ struct IEcoLab1* me) {
     return pCMe->m_pVTblINondelegatingUnk->Release((IEcoUnknown *)&pCMe->m_pVTblINondelegatingUnk);
 }
 
-/*
- *
- * <сводка>
- *   Функция Fire_OnMyCallback
- * </сводка>
- *
- * <описание>
- *   Функция вызова обратного интерфейса
- * </описание>
- *
- */
-int16_t ECOCALLMETHOD CEcoLab1_Fire_OnMyCallback(/* in */ struct IEcoLab1* me, /* in */ char_t* Name) {
+// callback function
+int16_t ECOCALLMETHOD CEcoLab1_Fire_OnMergeSortCalled(/* in */ struct IEcoLab1* me, const void * start_ptr, size_t elem_count) {
     CEcoLab1* pCMe = (CEcoLab1*)me;
     int16_t result = 0;
-    uint32_t count = 0;
-    uint32_t index = 0;
     IEcoEnumConnections* pEnum = 0;
     IEcoLab1Events* pIEvents = 0;
     EcoConnectionData cd;
@@ -79,7 +67,122 @@ int16_t ECOCALLMETHOD CEcoLab1_Fire_OnMyCallback(/* in */ struct IEcoLab1* me, /
             while (pEnum->pVTbl->Next(pEnum, 1, &cd, 0) == 0) {
                 result = cd.pUnk->pVTbl->QueryInterface(cd.pUnk, &IID_IEcoLab1Events, (void**)&pIEvents);
                 if ( (result == 0) && (pIEvents != 0) ) {
-                    result = pIEvents->pVTbl->OnMyCallback(pIEvents, Name);
+                    result = pIEvents->pVTbl->OnMergeSortCalled(pIEvents, start_ptr, elem_count);
+                    pIEvents->pVTbl->Release(pIEvents);
+                }
+                cd.pUnk->pVTbl->Release(cd.pUnk);
+            }
+            pEnum->pVTbl->Release(pEnum);
+        }
+    }
+    return result;
+}
+
+// callback function
+int16_t ECOCALLMETHOD CEcoLab1_Fire_OnRecursiveCall(/* in */ struct IEcoLab1* me, bool_t isFirstHalf) {
+    CEcoLab1* pCMe = (CEcoLab1*)me;
+    int16_t result = 0;
+    IEcoEnumConnections* pEnum = 0;
+    IEcoLab1Events* pIEvents = 0;
+    EcoConnectionData cd;
+
+    if (me == 0 ) {
+        return -1;
+    }
+
+    if (pCMe->m_pISinkCP != 0) {
+        result = ((IEcoConnectionPoint*)pCMe->m_pISinkCP)->pVTbl->EnumConnections((IEcoConnectionPoint*)pCMe->m_pISinkCP, &pEnum);
+        if ( (result == 0) && (pEnum != 0) ) {
+            while (pEnum->pVTbl->Next(pEnum, 1, &cd, 0) == 0) {
+                result = cd.pUnk->pVTbl->QueryInterface(cd.pUnk, &IID_IEcoLab1Events, (void**)&pIEvents);
+                if ( (result == 0) && (pIEvents != 0) ) {
+                    result = pIEvents->pVTbl->OnRecursiveCall(pIEvents, isFirstHalf);
+                    pIEvents->pVTbl->Release(pIEvents);
+                }
+                cd.pUnk->pVTbl->Release(cd.pUnk);
+            }
+            pEnum->pVTbl->Release(pEnum);
+        }
+    }
+    return result;
+}
+
+int16_t ECOCALLMETHOD CEcoLab1_Fire_OnRecursiveCallReturn(/* in */ struct IEcoLab1* me, bool_t isFirstHalf) {
+    CEcoLab1* pCMe = (CEcoLab1*)me;
+    int16_t result = 0;
+    IEcoEnumConnections* pEnum = 0;
+    IEcoLab1Events* pIEvents = 0;
+    EcoConnectionData cd;
+
+    if (me == 0 ) {
+        return -1;
+    }
+
+    if (pCMe->m_pISinkCP != 0) {
+        result = ((IEcoConnectionPoint*)pCMe->m_pISinkCP)->pVTbl->EnumConnections((IEcoConnectionPoint*)pCMe->m_pISinkCP, &pEnum);
+        if ( (result == 0) && (pEnum != 0) ) {
+            while (pEnum->pVTbl->Next(pEnum, 1, &cd, 0) == 0) {
+                result = cd.pUnk->pVTbl->QueryInterface(cd.pUnk, &IID_IEcoLab1Events, (void**)&pIEvents);
+                if ( (result == 0) && (pIEvents != 0) ) {
+                    result = pIEvents->pVTbl->OnRecursiveCallReturn(pIEvents, isFirstHalf);
+                    pIEvents->pVTbl->Release(pIEvents);
+                }
+                cd.pUnk->pVTbl->Release(cd.pUnk);
+            }
+            pEnum->pVTbl->Release(pEnum);
+        }
+    }
+    return result;
+}
+
+// callback function
+int16_t ECOCALLMETHOD CEcoLab1_Fire_BeforeMerge(/* in */ struct IEcoLab1* me, const void * start_ptr, size_t elem_count) {
+    CEcoLab1* pCMe = (CEcoLab1*)me;
+    int16_t result = 0;
+    IEcoEnumConnections* pEnum = 0;
+    IEcoLab1Events* pIEvents = 0;
+    EcoConnectionData cd;
+
+    if (me == 0 ) {
+        return -1;
+    }
+
+    if (pCMe->m_pISinkCP != 0) {
+        result = ((IEcoConnectionPoint*)pCMe->m_pISinkCP)->pVTbl->EnumConnections((IEcoConnectionPoint*)pCMe->m_pISinkCP, &pEnum);
+        if ( (result == 0) && (pEnum != 0) ) {
+            while (pEnum->pVTbl->Next(pEnum, 1, &cd, 0) == 0) {
+                result = cd.pUnk->pVTbl->QueryInterface(cd.pUnk, &IID_IEcoLab1Events, (void**)&pIEvents);
+                if ( (result == 0) && (pIEvents != 0) ) {
+                    result = pIEvents->pVTbl->BeforeMerge(pIEvents, start_ptr, elem_count);
+                    pIEvents->pVTbl->Release(pIEvents);
+                }
+                cd.pUnk->pVTbl->Release(cd.pUnk);
+            }
+            pEnum->pVTbl->Release(pEnum);
+        }
+    }
+    return result;
+}
+
+// callback function
+int16_t ECOCALLMETHOD CEcoLab1_Fire_AfterMerge(/* in */ struct IEcoLab1* me, const void * start_ptr, size_t elem_count) {
+    CEcoLab1* pCMe = (CEcoLab1*)me;
+    int16_t result = 0;
+    IEcoEnumConnections* pEnum = 0;
+    IEcoLab1Events* pIEvents = 0;
+    EcoConnectionData cd;
+
+    if (me == 0 ) {
+        return -1;
+    }
+
+    if (pCMe->m_pISinkCP != 0) {
+        result = ((IEcoConnectionPoint*)pCMe->m_pISinkCP)->pVTbl->EnumConnections((IEcoConnectionPoint*)pCMe->m_pISinkCP, &pEnum);
+        if ( (result == 0) && (pEnum != 0) ) {
+            while (pEnum->pVTbl->Next(pEnum, 1, &cd, 0) == 0) {
+                result = cd.pUnk->pVTbl->QueryInterface(cd.pUnk, &IID_IEcoLab1Events, (void**)&pIEvents);
+                if ( (result == 0) && (pIEvents != 0) ) {
+                    result = pIEvents->pVTbl->AfterMerge(pIEvents, start_ptr, elem_count);
                     pIEvents->pVTbl->Release(pIEvents);
                 }
                 cd.pUnk->pVTbl->Release(cd.pUnk);
@@ -100,6 +203,7 @@ void copy_bytes(char *src, char *dst, size_t count) {
 
 // реализация сортировки слиянием с использованием внешнего буфера для организации слияния
 void merge_sort(
+    IEcoLab1 *me,
 	char *start_ptr,
 	size_t elem_count,
 	size_t elem_size,
@@ -116,15 +220,25 @@ void merge_sort(
     char *left_ptr = start_ptr;
     char *right_ptr = middle_ptr;
 
+    // function called elem count
+    CEcoLab1_Fire_OnMergeSortCalled(me, start_ptr, elem_count);
+
 	// 0. base recursive case;
     if (elem_count < 2) {
         return;
     }
 
     // 1. sort each half recursively
-    merge_sort(start_ptr, left_count, elem_size, comp, buffer);
-    merge_sort(middle_ptr, right_count, elem_size, comp, buffer);
+    CEcoLab1_Fire_OnRecursiveCall(me, TRUE);
+    merge_sort(me, start_ptr, left_count, elem_size, comp, buffer);
+    CEcoLab1_Fire_OnRecursiveCallReturn(me, TRUE);
 
+    CEcoLab1_Fire_OnRecursiveCall(me, FALSE);
+    merge_sort(me, middle_ptr, right_count, elem_size, comp, buffer);
+    CEcoLab1_Fire_OnRecursiveCallReturn(me, FALSE);
+
+
+    CEcoLab1_Fire_BeforeMerge(me, start_ptr, elem_count);
 	// 2. merge sorted parts using buffer
     while (left_ptr < middle_ptr && right_ptr < end_ptr) {
         int comp_result = comp(left_ptr, right_ptr);
@@ -150,6 +264,8 @@ void merge_sort(
 
 	// 3. copy sorted values from buffer
     copy_bytes(buffer, start_ptr, byte_count);
+
+    CEcoLab1_Fire_AfterMerge(me, start_ptr, elem_count);
 }
 
 // Функция сортировка слиянием, использует сигнатуру qsort.
@@ -170,14 +286,11 @@ int16_t ECOCALLMETHOD CEcoLab1_qsort(
         return -1;
     }
 
-    /* Обратный вызов */
-    CEcoLab1_Fire_OnMyCallback(me, pCMe->m_Name);
-
 	// 1. allocate memory for buffer
 	buffer = pCMe->m_pIMem->pVTbl->Alloc(pCMe->m_pIMem, elem_count * elem_size);
 	
 	// 2. sort with buffer
-	merge_sort(pData, elem_count, elem_size, comp, buffer);
+	merge_sort(me, pData, elem_count, elem_size, comp, buffer);
 
 	// 3. free buffer memory
 	pCMe->m_pIMem->pVTbl->Free(pCMe->m_pIMem, buffer);

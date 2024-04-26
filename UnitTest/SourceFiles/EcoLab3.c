@@ -29,18 +29,9 @@ void *createIntArray(IEcoMemoryAllocator1 *pIMem, size_t size) {
     size_t i;
     int *arr = (int *) pIMem->pVTbl->Alloc(pIMem, size * sizeof(int));
     for (i = 0; i < size; i++) {
-        arr[i] = rand() %20003 - 10000;
+        arr[i] = rand() % 100;
     }
     return arr;
-}
-
-void printIntArray(void *array, size_t size) {
-    int * arr = (int *) array;
-    size_t i;
-    for (i = 0; i < size; ++i) {
-        printf("%d ", arr[i]);
-    }
-    printf("\n");
 }
 
 
@@ -131,11 +122,7 @@ int16_t EcoMain(IEcoUnknown* pIUnk) {
     printf("sink created\n\ntesting sorting\n");
 
     testArr = createIntArray(pIMem, testSize);
-    printIntArray(testArr, testSize);
-
     pIEcoLab1Rec->pVTbl->qsort(pIEcoLab1Rec, testArr, testSize, sizeof(int), compInts);
-
-    printIntArray(testArr, testSize);
 
     pIMem->pVTbl->Free(pIMem, testArr);
 

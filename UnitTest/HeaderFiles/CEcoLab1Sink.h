@@ -37,6 +37,7 @@ typedef struct CEcoLab1Sink {
     /* Счетчик ссылок */
     uint32_t m_cRef;
     uint32_t m_cCookie;
+    uint32_t m_depth;
 
     /* Интерфейс для работы с памятью */
     IEcoMemoryAllocator1* m_pIMem;

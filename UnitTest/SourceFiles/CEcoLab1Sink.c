@@ -20,6 +20,9 @@
 #include "CEcoLab1Sink.h"
 #include "IEcoConnectionPointContainer.h"
 
+int16_t large_pause = 400;
+int16_t small_pause = 100;
+
 /*
  *
  * <сводка>
@@ -99,26 +102,72 @@ uint32_t ECOCALLMETHOD CEcoLab1Sink_Release(/* in */ struct IEcoLab1Events* me) 
     return pCMe->m_cRef;
 }
 
-/*
- *
- * <сводка>
- *   Функция OnMyCallback
- * </сводка>
- *
- * <описание>
- *   Функция обратного вызова
- * </описание>
- *
- */
-int16_t ECOCALLMETHOD CEcoLab1Sink_OnMyCallback(/* in */ struct IEcoLab1Events* me, /* in */ char_t* Name) {
-    CEcoLab1Sink* pCMe = (CEcoLab1Sink*)me;
 
-    if (me == 0 ) {
+void CEcoLab1Sink_printIntArray(const void *array, size_t size) {
+    int * arr = (int *) array;
+    size_t i;
+    for (i = 0; i < size; ++i) {
+        Sleep(small_pause);
+        printf("%d ", arr[i]);
+    }
+    printf("\n");
+}
+
+
+int16_t ECOCALLMETHOD CEcoLab1Sink_OnMergeSortCalled(/* in */ struct IEcoLab1Events* me, /* in */ const void *startPtr, size_t elem_count) {
+    CEcoLab1Sink *pCMe = (CEcoLab1Sink *) me;
+    if (me == 0) {
+        return -1;
+    }
+    printf("depth: %d - ", pCMe->m_depth);
+    CEcoLab1Sink_printIntArray(startPtr, elem_count);
+    Sleep(large_pause);
+    return 0;
+}
+
+int16_t ECOCALLMETHOD CEcoLab1Sink_OnRecursiveCall(/* in */ struct IEcoLab1Events* me, bool_t firstHalf) {
+    CEcoLab1Sink *pCMe = (CEcoLab1Sink *) me;
+    if (me == 0) {
         return -1;
     }
 
-    printf("OnMyCallback fired\n");
+    printf("depth: %d - calling mergeSort recursively for %s half\n",  pCMe->m_depth, firstHalf? "1st" : "2nd");
+    pCMe->m_depth++;
+    Sleep(large_pause);
+    return 0;
+}
 
+int16_t ECOCALLMETHOD CEcoLab1Sink_OnRecursiveCallReturned(/* in */ struct IEcoLab1Events* me, bool_t firstHalf) {
+    CEcoLab1Sink *pCMe = (CEcoLab1Sink *) me;
+    if (me == 0) {
+        return -1;
+    }
+
+    pCMe->m_depth--;
+    printf("depth: %d - recursive call for %s half returned\n", pCMe->m_depth, firstHalf? "1st" : "2nd");
+    Sleep(large_pause);
+    return 0;
+}
+
+int16_t ECOCALLMETHOD CEcoLab1Sink_BeforeMerge(/* in */ struct IEcoLab1Events* me, /* in */ const void *startPtr, size_t elem_count) {
+    CEcoLab1Sink *pCMe = (CEcoLab1Sink *) me;
+    if (me == 0) {
+        return -1;
+    }
+    printf("depth: %d - ready to merge: ", pCMe->m_depth);
+    CEcoLab1Sink_printIntArray(startPtr, elem_count);
+    Sleep(large_pause);
+    return 0;
+}
+
+int16_t ECOCALLMETHOD CEcoLab1Sink_AfterMerge(/* in */ struct IEcoLab1Events* me, /* in */ const void *startPtr, size_t elem_count) {
+    CEcoLab1Sink *pCMe = (CEcoLab1Sink *) me;
+    if (me == 0) {
+        return -1;
+    }
+    printf("depth: %d - result: ", pCMe->m_depth);
+    CEcoLab1Sink_printIntArray(startPtr, elem_count);
+    Sleep(large_pause);
     return 0;
 }
 
@@ -193,7 +242,11 @@ IEcoLab1VTblEvents g_x2D2E3B9214F248A6A09ECB494B59C795VTblEvents = {
     CEcoLab1Sink_QueryInterface,
     CEcoLab1Sink_AddRef,
     CEcoLab1Sink_Release,
-    CEcoLab1Sink_OnMyCallback
+    CEcoLab1Sink_OnMergeSortCalled,
+    CEcoLab1Sink_OnRecursiveCall,
+    CEcoLab1Sink_OnRecursiveCallReturned,
+    CEcoLab1Sink_BeforeMerge,
+    CEcoLab1Sink_AfterMerge
 };
 
 /*
@@ -225,6 +278,7 @@ int16_t ECOCALLMETHOD createCEcoLab1Sink(/* in */ IEcoMemoryAllocator1* pIMem, /
 
     /* Установка счетчика ссылок на компонент */
     pCMe->m_cRef = 1;
+    pCMe->m_depth = 0;
 
     /* Создание таблицы функций интерфейса IEcoP2PEvents */
     pCMe->m_pVTblIEcoLab1Events = &g_x2D2E3B9214F248A6A09ECB494B59C795VTblEvents;
