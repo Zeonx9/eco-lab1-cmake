@@ -20,8 +20,8 @@
 #include "CEcoLab1Sink.h"
 #include "IEcoConnectionPointContainer.h"
 
-int16_t large_pause = 400;
-int16_t small_pause = 0;
+int16_t large_pause = 700;
+int16_t small_pause = 500;
 
 /*
  *
@@ -106,10 +106,29 @@ uint32_t ECOCALLMETHOD CEcoLab1Sink_Release(/* in */ struct IEcoLab1Events* me) 
 void CEcoLab1Sink_printIntArray(const void *array, size_t size) {
     int * arr = (int *) array;
     size_t i;
+    HANDLE handle = GetStdHandle(STD_OUTPUT_HANDLE);
+    SetConsoleTextAttribute(handle, BACKGROUND_BLUE | BACKGROUND_RED | BACKGROUND_GREEN | BACKGROUND_INTENSITY);
     for (i = 0; i < size; ++i) {
-        Sleep(small_pause);
-        printf("%d ", arr[i]);
+        printf(" %d ", arr[i]);
     }
+    SetConsoleTextAttribute(handle, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+    printf("\n");
+}
+
+void CEcoLab1Sink_printIntArrayLeftRight(const void *array, size_t size) {
+    int * arr = (int *) array;
+    size_t i;
+    HANDLE handle = GetStdHandle(STD_OUTPUT_HANDLE);
+    SetConsoleTextAttribute(handle, BACKGROUND_BLUE | FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY);
+    for (i = 0; i < size / 2; ++i) {
+        printf(" %d ", arr[i]);
+    }
+    SetConsoleTextAttribute(handle, BACKGROUND_RED | FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY);
+    for (i = size / 2; i < size; ++i) {
+        printf(" %d ", arr[i]);
+    }
+
+    SetConsoleTextAttribute(handle, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
     printf("\n");
 }
 
@@ -119,6 +138,7 @@ int16_t ECOCALLMETHOD CEcoLab1Sink_OnMergeSortCalled(/* in */ struct IEcoLab1Eve
     if (me == 0) {
         return -1;
     }
+//    system("cls");
     printf("depth: %d - ", pCMe->m_depth);
     CEcoLab1Sink_printIntArray(startPtr, elem_count);
     Sleep(large_pause);
@@ -130,7 +150,7 @@ int16_t ECOCALLMETHOD CEcoLab1Sink_OnRecursiveCall(/* in */ struct IEcoLab1Event
     if (me == 0) {
         return -1;
     }
-
+//    system("cls");
     printf("depth: %d - calling mergeSort recursively for %s half\n",  pCMe->m_depth, firstHalf? "1st" : "2nd");
     pCMe->m_depth++;
     Sleep(large_pause);
@@ -142,7 +162,7 @@ int16_t ECOCALLMETHOD CEcoLab1Sink_OnRecursiveCallReturned(/* in */ struct IEcoL
     if (me == 0) {
         return -1;
     }
-
+//    system("cls");
     pCMe->m_depth--;
     printf("depth: %d - recursive call for %s half returned\n", pCMe->m_depth, firstHalf? "1st" : "2nd");
     Sleep(large_pause);
@@ -154,8 +174,9 @@ int16_t ECOCALLMETHOD CEcoLab1Sink_BeforeMerge(/* in */ struct IEcoLab1Events* m
     if (me == 0) {
         return -1;
     }
+//    system("cls");
     printf("depth: %d - ready to merge: ", pCMe->m_depth);
-    CEcoLab1Sink_printIntArray(startPtr, elem_count);
+    CEcoLab1Sink_printIntArrayLeftRight(startPtr, elem_count);
     Sleep(large_pause);
     return 0;
 }
@@ -165,6 +186,7 @@ int16_t ECOCALLMETHOD CEcoLab1Sink_AfterMerge(/* in */ struct IEcoLab1Events* me
     if (me == 0) {
         return -1;
     }
+//    system("cls");
     printf("\ndepth: %d - result: ", pCMe->m_depth);
     CEcoLab1Sink_printIntArray(startPtr, elem_count);
     Sleep(large_pause);
@@ -177,8 +199,15 @@ int16_t ECOCALLMETHOD CEcoLab1Sink_OnMergeElementSelected(/* in */ struct IEcoLa
     if (me == 0) {
         return -1;
     }
-    printf("%d(%s) ", element, isFromFirstHalf? "L" : "R");
-    Sleep(large_pause);
+    HANDLE handle = GetStdHandle(STD_OUTPUT_HANDLE);
+    if (isFromFirstHalf) {
+        SetConsoleTextAttribute(handle, BACKGROUND_BLUE | FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY);
+    } else {
+        SetConsoleTextAttribute(handle, BACKGROUND_RED | FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY);
+    }
+    printf(" %d ", element);
+    SetConsoleTextAttribute(handle, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+    Sleep(small_pause);
     return 0;
 }
 
